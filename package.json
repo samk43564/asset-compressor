@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "streaming api",
+  "description": "compress api",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,6 +17,8 @@
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
     "multer": "^1.4.2",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "sharp": "^0.25.2",
+    "shortid": "^2.2.15"
   }
 }
