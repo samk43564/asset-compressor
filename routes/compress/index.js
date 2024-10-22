@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const router = Router();
-const multerTempUploads = require("../../middleware/multer");
+const multerUploads = require("../../middleware/multer");
 
 const fs = require("fs");
 
-router.post("/", multerTempUploads, async (req, res) => {
+router.post("/image", multerUploads, async (req, res) => {
 
   const filepath = req.file.path
   const host = req.headers.host
@@ -52,6 +52,26 @@ router.post("/", multerTempUploads, async (req, res) => {
     if (err) throw err;
   });
   res.send(data);
+});
+
+router.post("/video", multerUploads, (req, res) => {
+  let inputFileName = req.file.originalname
+  const inputFilePath = path.join(req.file.path);
+  const outputFileName = inputFileName.replace('.mkv', '.mp4');
+  const outputFilePath = path.join('public', outputFileName);
+
+  // Command to convert MKV to MP4 using FFmpeg
+  const ffmpegCommand = `ffmpeg -i "${inputFilePath}" -c:v libx264 -crf 23 -preset medium -c:a copy "${outputFilePath}"`;
+
+  // Execute FFmpeg command
+  exec(ffmpegCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Conversion failed:', error);
+      return res.status(500).json({ error: 'Conversion failed' });
+    }
+    const downloadLink = `/download/${outputFileName}`;
+    res.json({ downloadLink });
+  });
 });
 
 module.exports = router;
